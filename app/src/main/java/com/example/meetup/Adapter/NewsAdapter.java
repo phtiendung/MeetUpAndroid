@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.meetup.Fragment.NewsFragment;
 import com.example.meetup.Model.News;
 import com.example.meetup.R;
 import com.example.meetup.databinding.NewsItemBinding;
@@ -41,7 +42,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.binding.tvDescription.setText(data.get(position).getDescription());
         holder.binding.tvFeed.setText(data.get(position).getFeed());
         holder.binding.tvPubdate.setText(data.get(position).getPublishDate());
-        //Glide.with().load(url).override(150,150).into(holder.img);
+        String uri=data.get(position).getThumbImg();
+        Glide.with(holder.binding.imvNews).load(uri).into(holder.binding.imvNews);
     }
 
     @Override
@@ -56,7 +58,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             super(itemView.getRoot());
             binding = itemView;
         }
-
     }
 
 }

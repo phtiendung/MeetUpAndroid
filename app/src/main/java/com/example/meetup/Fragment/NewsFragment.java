@@ -5,12 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.meetup.Adapter.NewsAdapter;
 import com.example.meetup.Dao.NewsDB;
@@ -27,27 +29,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsFragment extends Fragment implements Callback<APIStatus> {
+public class NewsFragment extends Fragment implements Callback<APIStatus>, SwipeRefreshLayout.OnRefreshListener {
     private FragmentNewBinding fragmentNewBinding;
     private NewsAdapter newsAdapter;
     private List<News> data = new ArrayList<>();
     String DATABASE_NAME = "news_database";
-
+    private int pageIndex=2;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentNewBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_new, container, false);
+        fragmentNewBinding.srlNews.setOnRefreshListener(this);
         fragmentNewBinding.rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         newsAdapter=new NewsAdapter(getContext());
         APIClient.getInstance().getNews(1,10).enqueue(new Callback<APIStatus>() {
             @Override
             public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-                Log.e("TAG","oki");
+               List<News> newsList=response.body().getResponse().getNews();
+                //data.addAll(newsList);
             }
 
             @Override
             public void onFailure(Call<APIStatus> call, Throwable t) {
-                Log.e("TAG","Fail"+t.getMessage());
+                Toast.makeText(getContext(),"Kiểm tra lại kết nối",Toast.LENGTH_LONG).show();
             }
         });
         addData();
@@ -80,5 +84,25 @@ public class NewsFragment extends Fragment implements Callback<APIStatus> {
     @Override
     public void onFailure(Call<APIStatus> call, Throwable t) {
 
+    }
+
+    @Override
+    public void onRefresh() {
+        pageIndex++;
+        APIClient.getInstance().getNews(pageIndex,10).enqueue(new Callback<APIStatus>() {
+            @Override
+            public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
+                data=response.body().getResponse().getNews();
+                NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().updateNews(data);
+                newsAdapter.setData(data);
+                fragmentNewBinding.rcvNews.setAdapter(newsAdapter);
+                fragmentNewBinding.srlNews.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<APIStatus> call, Throwable t) {
+                Toast.makeText(getContext(),"Kiểm tra lại kết nối mạng",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

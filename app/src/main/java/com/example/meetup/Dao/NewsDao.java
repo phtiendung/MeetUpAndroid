@@ -17,7 +17,7 @@ public interface NewsDao {
     @Insert
     void insertnews(List<News> news);
     @Update
-    void updateNews(News news);
+    void updateNews(List<News> news);
     @Delete
     void deleteNews(News news);
 }

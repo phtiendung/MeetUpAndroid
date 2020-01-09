@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Fragment.NewsFragment"
-        android:layout_marginTop="40dp">
+<!--<layout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools">-->
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:context=".Fragment.NewsFragment"-->
+<!--        android:layout_marginTop="40dp">-->
 
-        <!-- TODO: Update blank fragment layout -->
-       <androidx.recyclerview.widget.RecyclerView
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:id="@+id/rcvNews">
-       </androidx.recyclerview.widget.RecyclerView>
+<!--        &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+<!--       <androidx.recyclerview.widget.RecyclerView-->
+<!--           android:layout_width="match_parent"-->
+<!--           android:layout_height="match_parent"-->
+<!--           android:id="@+id/rcvNews">-->
+<!--       </androidx.recyclerview.widget.RecyclerView>-->
 
-    </FrameLayout>
-</layout>
+<!--    </FrameLayout>-->
+    <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlNews"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvNews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </layout>
+<!--</layout>-->
