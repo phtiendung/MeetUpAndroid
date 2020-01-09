@@ -9,51 +9,52 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "table_news")
 public class News {
     @PrimaryKey
+    @ColumnInfo(name="event_id")
     @SerializedName("id")
     @Expose
-    private Integer id;
-    @ColumnInfo(name="news_feed")
+    private int id;
+    @ColumnInfo(name="event_feed")
     @SerializedName("feed")
     @Expose
     private String feed;
-    @ColumnInfo(name="new_title")
+    @ColumnInfo(name="event_title")
     @SerializedName("title")
     @Expose
     private String title;
-    @ColumnInfo(name="news_thumb_img")
+    @ColumnInfo(name="event_thumb_img")
     @SerializedName("thumb_img")
     @Expose
     private String thumbImg;
-    @ColumnInfo(name="news_detail_url")
+    @ColumnInfo(name="event_detail_url")
     @SerializedName("detail_url")
     @Expose
     private String detailUrl;
-    @ColumnInfo(name="news_description")
+    @ColumnInfo(name="event_description")
     @SerializedName("description")
     @Expose
     private String description;
-    @ColumnInfo(name="news_author")
+    @ColumnInfo(name="event_author")
     @SerializedName("author")
     @Expose
     private String author;
-    @ColumnInfo(name="news_publish_date")
+    @ColumnInfo(name="event_publish_date")
     @SerializedName("publish_date")
     @Expose
     private String publishDate;
-    @ColumnInfo(name="news_created_at")
+    @ColumnInfo(name="event_create_at")
     @SerializedName("created_at")
     @Expose
     private String createdAt;
-    @ColumnInfo(name="news_updated_at")
+    @ColumnInfo(name="event_update_at")
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -16,6 +16,7 @@ import com.example.meetup.Adapter.NewsAdapter;
 import com.example.meetup.Dao.NewsDB;
 import com.example.meetup.Model.News;
 import com.example.meetup.NetWorking.APIClient;
+import com.example.meetup.NetWorking.APIStatus;
 import com.example.meetup.R;
 import com.example.meetup.databinding.FragmentNewBinding;
 
@@ -26,9 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.ContentValues.TAG;
-
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements Callback<APIStatus> {
     private FragmentNewBinding fragmentNewBinding;
     private NewsAdapter newsAdapter;
     private List<News> data = new ArrayList<>();
@@ -39,26 +38,47 @@ public class NewsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentNewBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_new, container, false);
         fragmentNewBinding.rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
-        View view = fragmentNewBinding.getRoot();
-        getNewsData();
-        return view;
-    }
-
-
-    private void getNewsData() {
-        APIClient.getInstance().getNews(1, 10).enqueue(new Callback<List<News>>() {
+        newsAdapter=new NewsAdapter(getContext());
+        APIClient.getInstance().getNews(1,10).enqueue(new Callback<APIStatus>() {
             @Override
-            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
-                data = response.body();
-                Log.e(TAG, "onResponse: " + data);
+            public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
+                Log.e("TAG","oki");
             }
 
             @Override
-            public void onFailure(Call<List<News>> call, Throwable t) {
-                Log.e(TAG, "onFailure: fail"+t.getMessage());
+            public void onFailure(Call<APIStatus> call, Throwable t) {
+                Log.e("TAG","Fail"+t.getMessage());
             }
         });
+        addData();
+        View view = fragmentNewBinding.getRoot();
+        return view;
+    }
+    public void addData()
+    {
+        if(NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().getNewsAll().isEmpty())
+        {
+            APIClient.getInstance().getNews(1,10).enqueue(this);
+        }
+        else
+        {
+            data=NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().getNewsAll();
+            newsAdapter.setData(data);
+            fragmentNewBinding.rcvNews.setAdapter(newsAdapter);
+            newsAdapter.setData(data);
+            fragmentNewBinding.rcvNews.setAdapter(newsAdapter);
 
+        }
     }
 
+    @Override
+    public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
+        data=response.body().getResponse().getNews();
+        NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().insertnews(data);
+    }
+
+    @Override
+    public void onFailure(Call<APIStatus> call, Throwable t) {
+
+    }
 }

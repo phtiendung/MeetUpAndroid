@@ -1,6 +1,7 @@
 package com.example.meetup.NetWorking;
 
-import com.example.meetup.Model.News;
+
+import com.example.meetup.Model.Event;
 
 import java.util.List;
 import retrofit2.Call;
@@ -10,7 +11,12 @@ import retrofit2.http.Query;
 
 public interface API {
     @GET("listNews")
-    Call<List<News>> getNews(
+    Call<APIStatus> getNews(
+            @Query("pageIndex") int pageIndex,
+            @Query("pageSize") int pageSize
+    );
+    @GET("listPopularEvents")
+    Call<List<Event>> getPopularEvent(
             @Query("pageIndex") int pageIndex,
             @Query("pageSize") int pageSize
     );
