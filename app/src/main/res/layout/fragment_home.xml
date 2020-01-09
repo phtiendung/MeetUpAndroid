@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/home_frame"
+        tools:context=".Fragment.HomeFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+        <com.gigamole.navigationtabstrip.NavigationTabStrip
+            android:id="@+id/tabStrip"
+            android:layout_width="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_height="40dp"
+            app:nts_active_color="#000"
+            app:nts_animation_duration="300"
+             />
+    </FrameLayout>
+</layout>

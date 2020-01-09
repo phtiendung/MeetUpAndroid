@@ -21,7 +21,7 @@ public class NetContext {
     }
 
     private Retrofit retrofit;
-    public String BASE_URL = "";
+    public String BASE_URL = "http://meetup.rikkei.org/api/v0/";
 
     public String getBASE_URL() {
         return BASE_URL;
