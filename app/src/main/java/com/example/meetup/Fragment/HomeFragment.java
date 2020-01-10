@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.meetup.Dao.NewsDB;
 import com.example.meetup.R;
 import com.example.meetup.databinding.FragmentHomeBinding;
 import com.gigamole.navigationtabstrip.NavigationTabStrip;

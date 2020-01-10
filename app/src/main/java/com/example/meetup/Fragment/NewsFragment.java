@@ -12,10 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.meetup.Adapter.NewsAdapter;
 import com.example.meetup.Dao.NewsDB;
+import com.example.meetup.EndlessRecyclerViewScrollListener;
 import com.example.meetup.Model.News;
 import com.example.meetup.NetWorking.APIClient;
 import com.example.meetup.NetWorking.APIStatus;
@@ -34,26 +36,36 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
     private NewsAdapter newsAdapter;
     private List<News> data = new ArrayList<>();
     String DATABASE_NAME = "news_database";
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private int pageIndex=2;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentNewBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_new, container, false);
         fragmentNewBinding.srlNews.setOnRefreshListener(this);
-        fragmentNewBinding.rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        fragmentNewBinding.rcvNews.setLayoutManager(linearLayoutManager);
         newsAdapter=new NewsAdapter(getContext());
-        APIClient.getInstance().getNews(1,10).enqueue(new Callback<APIStatus>() {
+        //NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().deleteAll();
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
-            public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-               List<News> newsList=response.body().getResponse().getNews();
-                //data.addAll(newsList);
-            }
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                APIClient.getInstance().getNews(page,10).enqueue(new Callback<APIStatus>() {
+                    @Override
+                    public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
+                        List<News> newsList=response.body().getResponse().getNews();
+                        data.addAll(newsList);
+                        newsAdapter.notifyItemRangeInserted(page*10,10);
+                    }
 
-            @Override
-            public void onFailure(Call<APIStatus> call, Throwable t) {
-                Toast.makeText(getContext(),"Kiểm tra lại kết nối",Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onFailure(Call<APIStatus> call, Throwable t) {
+
+                    }
+                });
             }
-        });
+        };
+        fragmentNewBinding.rcvNews.addOnScrollListener(endlessRecyclerViewScrollListener);
         addData();
         View view = fragmentNewBinding.getRoot();
         return view;
@@ -62,7 +74,7 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
     {
         if(NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().getNewsAll().isEmpty())
         {
-            APIClient.getInstance().getNews(1,10).enqueue(this);
+            APIClient.getInstance().getNews(0,10).enqueue(this);
         }
         else
         {

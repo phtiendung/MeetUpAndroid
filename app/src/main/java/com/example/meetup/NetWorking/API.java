@@ -16,7 +16,7 @@ public interface API {
             @Query("pageSize") int pageSize
     );
     @GET("listPopularEvents")
-    Call<List<Event>> getPopularEvent(
+    Call<APIStatus> getPopularEvent(
             @Query("pageIndex") int pageIndex,
             @Query("pageSize") int pageSize
     );

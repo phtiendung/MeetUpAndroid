@@ -20,4 +20,6 @@ public interface NewsDao {
     void updateNews(List<News> news);
     @Delete
     void deleteNews(News news);
+    @Query("DELETE FROM TABLE_NEWS")
+    void deleteAll();
 }

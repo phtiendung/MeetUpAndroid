@@ -2,6 +2,7 @@ package com.example.meetup.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -31,8 +32,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        NewsItemBinding newsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.news_item, parent, false);
-        return new NewsViewHolder(newsItemBinding);
+
+            NewsItemBinding newsItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.news_item, parent, false);
+            return new NewsViewHolder(newsItemBinding);
     }
 
     @Override
@@ -44,6 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.binding.tvPubdate.setText(data.get(position).getPublishDate());
         String uri=data.get(position).getThumbImg();
         Glide.with(holder.binding.imvNews).load(uri).into(holder.binding.imvNews);
+
     }
 
     @Override

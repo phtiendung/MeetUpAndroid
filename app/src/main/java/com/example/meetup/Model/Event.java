@@ -1,60 +1,83 @@
 package com.example.meetup.Model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity(tableName = "table_event")
 public class Event {
+    @PrimaryKey
+    @ColumnInfo(name="event_id")
     @SerializedName("id")
     @Expose
     private Integer id;
+    @ColumnInfo(name="event_status")
     @SerializedName("status")
     @Expose
     private Integer status;
+    @ColumnInfo(name="event_photo")
     @SerializedName("photo")
     @Expose
     private String photo;
+    @ColumnInfo(name="event_name")
     @SerializedName("name")
     @Expose
     private String name;
+    @ColumnInfo(name="event_description_raw")
     @SerializedName("description_raw")
     @Expose
     private String descriptionRaw;
+    @ColumnInfo(name="event_description_html")
     @SerializedName("description_html")
     @Expose
     private String descriptionHtml;
+    @ColumnInfo(name="event_schedule_permanent")
     @SerializedName("schedule_permanent")
     @Expose
     private Object schedulePermanent;
+    @ColumnInfo(name="event_schedule_date_warning")
     @SerializedName("schedule_date_warning")
     @Expose
     private Object scheduleDateWarning;
+    @ColumnInfo(name="event_schedule_time_alert")
     @SerializedName("schedule_time_alert")
     @Expose
     private Object scheduleTimeAlert;
+    @ColumnInfo(name="event_schedule_start_date")
     @SerializedName("schedule_start_date")
     @Expose
     private String scheduleStartDate;
+    @ColumnInfo(name="event_schedule_start_time")
     @SerializedName("schedule_start_time")
     @Expose
     private String scheduleStartTime;
+    @ColumnInfo(name="event_schedule_end_date")
     @SerializedName("schedule_end_date")
     @Expose
     private String scheduleEndDate;
+    @ColumnInfo(name="event_schedule_end_time")
     @SerializedName("schedule_end_time")
     @Expose
     private String scheduleEndTime;
+    @ColumnInfo(name="event_schedule_one_day_event")
     @SerializedName("schedule_one_day_event")
     @Expose
     private Object scheduleOneDayEvent;
+    @ColumnInfo(name="event_schedule_extra")
     @SerializedName("schedule_extra")
     @Expose
     private Object scheduleExtra;
+    @ColumnInfo(name="event_going_count")
     @SerializedName("going_count")
     @Expose
     private Integer goingCount;
+    @ColumnInfo(name="event_went_count")
     @SerializedName("went_count")
     @Expose
     private Integer wentCount;
+    @ColumnInfo(name="event_venue")
     @SerializedName("venue")
     @Expose
     private VenuePopular venue;
