@@ -1,6 +1,7 @@
 package com.example.meetup.Model;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -36,15 +37,15 @@ public class Event {
     @ColumnInfo(name="event_schedule_permanent")
     @SerializedName("schedule_permanent")
     @Expose
-    private Object schedulePermanent;
+    private String schedulePermanent;
     @ColumnInfo(name="event_schedule_date_warning")
     @SerializedName("schedule_date_warning")
     @Expose
-    private Object scheduleDateWarning;
+    private String scheduleDateWarning;
     @ColumnInfo(name="event_schedule_time_alert")
     @SerializedName("schedule_time_alert")
     @Expose
-    private Object scheduleTimeAlert;
+    private String scheduleTimeAlert;
     @ColumnInfo(name="event_schedule_start_date")
     @SerializedName("schedule_start_date")
     @Expose
@@ -64,11 +65,11 @@ public class Event {
     @ColumnInfo(name="event_schedule_one_day_event")
     @SerializedName("schedule_one_day_event")
     @Expose
-    private Object scheduleOneDayEvent;
+    private String scheduleOneDayEvent;
     @ColumnInfo(name="event_schedule_extra")
     @SerializedName("schedule_extra")
     @Expose
-    private Object scheduleExtra;
+    private String scheduleExtra;
     @ColumnInfo(name="event_going_count")
     @SerializedName("going_count")
     @Expose
@@ -77,9 +78,9 @@ public class Event {
     @SerializedName("went_count")
     @Expose
     private Integer wentCount;
-    @ColumnInfo(name="event_venue")
+
     @SerializedName("venue")
-    @Expose
+    @Embedded
     private VenuePopular venue;
 
     public Integer getId() {
@@ -130,27 +131,27 @@ public class Event {
         this.descriptionHtml = descriptionHtml;
     }
 
-    public Object getSchedulePermanent() {
+    public String getSchedulePermanent() {
         return schedulePermanent;
     }
 
-    public void setSchedulePermanent(Object schedulePermanent) {
+    public void setSchedulePermanent(String schedulePermanent) {
         this.schedulePermanent = schedulePermanent;
     }
 
-    public Object getScheduleDateWarning() {
+    public String getScheduleDateWarning() {
         return scheduleDateWarning;
     }
 
-    public void setScheduleDateWarning(Object scheduleDateWarning) {
+    public void setScheduleDateWarning(String scheduleDateWarning) {
         this.scheduleDateWarning = scheduleDateWarning;
     }
 
-    public Object getScheduleTimeAlert() {
+    public String getScheduleTimeAlert() {
         return scheduleTimeAlert;
     }
 
-    public void setScheduleTimeAlert(Object scheduleTimeAlert) {
+    public void setScheduleTimeAlert(String scheduleTimeAlert) {
         this.scheduleTimeAlert = scheduleTimeAlert;
     }
 
@@ -186,19 +187,19 @@ public class Event {
         this.scheduleEndTime = scheduleEndTime;
     }
 
-    public Object getScheduleOneDayEvent() {
+    public String getScheduleOneDayEvent() {
         return scheduleOneDayEvent;
     }
 
-    public void setScheduleOneDayEvent(Object scheduleOneDayEvent) {
+    public void setScheduleOneDayEvent(String scheduleOneDayEvent) {
         this.scheduleOneDayEvent = scheduleOneDayEvent;
     }
 
-    public Object getScheduleExtra() {
+    public String getScheduleExtra() {
         return scheduleExtra;
     }
 
-    public void setScheduleExtra(Object scheduleExtra) {
+    public void setScheduleExtra(String scheduleExtra) {
         this.scheduleExtra = scheduleExtra;
     }
 

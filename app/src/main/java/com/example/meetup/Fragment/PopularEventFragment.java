@@ -1,9 +1,12 @@
 package com.example.meetup.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +22,11 @@ import com.example.meetup.Dao.EventDB;
 import com.example.meetup.Dao.NewsDB;
 import com.example.meetup.EndlessRecyclerViewScrollListener;
 import com.example.meetup.Model.Event;
+import com.example.meetup.NetWorking.API;
 import com.example.meetup.NetWorking.APIClient;
 import com.example.meetup.NetWorking.APIStatus;
 import com.example.meetup.R;
+import com.example.meetup.Service.MyShared;
 import com.example.meetup.databinding.FragmentPopularBinding;
 import com.example.meetup.databinding.PopulareventItemBinding;
 
@@ -35,45 +40,48 @@ import retrofit2.Response;
 public class PopularEventFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Callback<APIStatus> {
     private FragmentPopularBinding binding;
     private EventAdapter adapter;
-    private List<Event> data=new ArrayList<>();
-    String DATABASE_NAME="event_database";
+    private List<Event> data = new ArrayList<>();
+    private String DATABASE_NAME = "event_database";
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
-    private int pageIndex=2;
+    private int pageIndex = 2;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         binding= DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_popular,container,false);
-         binding.srlPopular.setOnRefreshListener(this);
+        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_popular,container,false);
+        binding.srlPopular.setOnRefreshListener(this);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        binding.rcvPopular.setLayoutManager(linearLayoutManager);
+        adapter=new EventAdapter(getContext());
         //EventDB.getInstance(getContext(),DATABASE_NAME).getEventDao().deleteEventAll();
-        endlessRecyclerViewScrollListener =new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        endlessRecyclerViewScrollListener=new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 APIClient.getInstance().getPopularEvent(page,10).enqueue(new Callback<APIStatus>() {
                     @Override
                     public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-                        List<Event> events=response.body().getResponse().getEvents();
-                        data.addAll(events);
+                        List<Event> eventList=response.body().getResponse().getEvents();
+                        data.addAll(eventList);
                         adapter.notifyItemRangeInserted(page*10,10);
                     }
 
                     @Override
                     public void onFailure(Call<APIStatus> call, Throwable t) {
-
+                        Toast.makeText(getContext(),"Kiểm tra lại kết nối mạng",Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         };
         binding.rcvPopular.addOnScrollListener(endlessRecyclerViewScrollListener);
-        addData();
         View view=binding.getRoot();
+        insertData();
         return view;
     }
-
-    private void addData() {
+    private void insertData()
+    {
         if(EventDB.getInstance(getContext(),DATABASE_NAME).getEventDao().getEventsAll().isEmpty())
         {
-            APIClient.getInstance().getPopularEvent(0,10).enqueue(this);
+            APIClient.getInstance().getPopularEvent(1,10).enqueue(this);
         }
         else
         {
@@ -82,20 +90,33 @@ public class PopularEventFragment extends Fragment implements SwipeRefreshLayout
             binding.rcvPopular.setAdapter(adapter);
         }
     }
-
     @Override
     public void onRefresh() {
+        pageIndex++;
+        APIClient.getInstance().getPopularEvent(pageIndex,10).enqueue(new Callback<APIStatus>() {
+            @Override
+            public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
+                data=response.body().getResponse().getEvents();
+                adapter.setData(data);
+                binding.rcvPopular.setAdapter(adapter);
+                binding.srlPopular.setRefreshing(false);
+            }
 
+            @Override
+            public void onFailure(Call<APIStatus> call, Throwable t) {
+                Toast.makeText(getContext(),"Kiểm tra lại kết nối mạng",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
         data=response.body().getResponse().getEvents();
-        EventDB.getInstance(getContext(),DATABASE_NAME).getEventDao().updateEvent(data);
+        EventDB.getInstance(getContext(),DATABASE_NAME).getEventDao().insertEvent(data);
     }
 
     @Override
     public void onFailure(Call<APIStatus> call, Throwable t) {
-
+        Toast.makeText(getContext(),"Kiểm tra lại kết nối mạng",Toast.LENGTH_SHORT).show();
     }
 }

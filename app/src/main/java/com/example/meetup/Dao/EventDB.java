@@ -10,13 +10,13 @@ import androidx.room.RoomDatabase;
 import com.example.meetup.Model.Event;
 
 @Database(entities = Event.class,version = 1)
-public abstract class EventDB extends RoomDatabase {
+public abstract class EventDB extends RoomDatabase{
     private static EventDB eventDB;
-    public static EventDB getInstance(Context context, String databasename)
+    public static EventDB getInstance(Context context,String databasename)
     {
         if(eventDB==null)
         {
-            eventDB= Room.databaseBuilder(context,EventDB.class,databasename)
+            eventDB=Room.databaseBuilder(context,EventDB.class,databasename)
                     .allowMainThreadQueries()
                     .build();
         }

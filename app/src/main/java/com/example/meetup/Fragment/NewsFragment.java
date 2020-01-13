@@ -37,25 +37,26 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
     private List<News> data = new ArrayList<>();
     String DATABASE_NAME = "news_database";
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
-    private int pageIndex=2;
+    private int pageIndex = 2;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentNewBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_new, container, false);
         fragmentNewBinding.srlNews.setOnRefreshListener(this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         fragmentNewBinding.rcvNews.setLayoutManager(linearLayoutManager);
-        newsAdapter=new NewsAdapter(getContext());
+        newsAdapter = new NewsAdapter(getContext());
         //NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().deleteAll();
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                APIClient.getInstance().getNews(page,10).enqueue(new Callback<APIStatus>() {
+                APIClient.getInstance().getNews(page, 10).enqueue(new Callback<APIStatus>() {
                     @Override
                     public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-                        List<News> newsList=response.body().getResponse().getNews();
+                        List<News> newsList = response.body().getResponse().getNews();
                         data.addAll(newsList);
-                        newsAdapter.notifyItemRangeInserted(page*10,10);
+                        newsAdapter.notifyItemRangeInserted(page * 10, 10);
                     }
 
                     @Override
@@ -70,27 +71,23 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
         View view = fragmentNewBinding.getRoot();
         return view;
     }
-    public void addData()
-    {
-        if(NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().getNewsAll().isEmpty())
-        {
-            APIClient.getInstance().getNews(0,10).enqueue(this);
-        }
-        else
-        {
-            data=NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().getNewsAll();
+
+    public void addData() {
+        if (NewsDB.getInstance(getContext(), DATABASE_NAME).getNewsDao().getNewsAll().isEmpty()) {
+            APIClient.getInstance().getNews(0, 10).enqueue(this);
+        } else {
+            data = NewsDB.getInstance(getContext(), DATABASE_NAME).getNewsDao().getNewsAll();
             newsAdapter.setData(data);
             fragmentNewBinding.rcvNews.setAdapter(newsAdapter);
-            newsAdapter.setData(data);
-            fragmentNewBinding.rcvNews.setAdapter(newsAdapter);
+
 
         }
     }
 
     @Override
     public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-        data=response.body().getResponse().getNews();
-        NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().insertnews(data);
+        data = response.body().getResponse().getNews();
+        NewsDB.getInstance(getContext(), DATABASE_NAME).getNewsDao().insertnews(data);
     }
 
     @Override
@@ -101,11 +98,11 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
     @Override
     public void onRefresh() {
         pageIndex++;
-        APIClient.getInstance().getNews(pageIndex,10).enqueue(new Callback<APIStatus>() {
+        APIClient.getInstance().getNews(pageIndex, 10).enqueue(new Callback<APIStatus>() {
             @Override
             public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-                data=response.body().getResponse().getNews();
-                NewsDB.getInstance(getContext(),DATABASE_NAME).getNewsDao().updateNews(data);
+                data = response.body().getResponse().getNews();
+                NewsDB.getInstance(getContext(), DATABASE_NAME).getNewsDao().updateNews(data);
                 newsAdapter.setData(data);
                 fragmentNewBinding.rcvNews.setAdapter(newsAdapter);
                 fragmentNewBinding.srlNews.setRefreshing(false);
@@ -113,7 +110,7 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
 
             @Override
             public void onFailure(Call<APIStatus> call, Throwable t) {
-                Toast.makeText(getContext(),"Kiểm tra lại kết nối mạng",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT).show();
             }
         });
     }

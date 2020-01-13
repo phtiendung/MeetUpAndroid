@@ -21,7 +21,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     LayoutInflater inflater;
 
     public EventAdapter(Context context) {
-        this.inflater=LayoutInflater.from(context);
+        this.inflater = LayoutInflater.from(context);
     }
 
     public void setData(List<Event> data) {
@@ -32,16 +32,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        PopulareventItemBinding itemBinding= DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.popularevent_item,parent,false);
+        PopulareventItemBinding itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.popularevent_item, parent, false);
         return new EventViewHolder(itemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        Event event=data.get(position);
-        holder.binding.tvEventName.setText(event.getName());
-        holder.binding.tvDescription.setText(event.getDescriptionRaw());
-        Glide.with(holder.binding.imvEvent).load(event.getPhoto()).into(holder.binding.imvEvent);
+        holder.binding.tvEventName.setText(data.get(position).getName());
+        holder.binding.tvDescription.setText(data.get(position).getDescriptionRaw());
+        holder.binding.tvGoingCount.setText(data.get(position).getGoingCount().toString());
+        String uri=data.get(position).getPhoto();
+        Glide.with(holder.binding.imvEvent).load(uri).into(holder.binding.imvEvent);
     }
 
     @Override
@@ -51,9 +52,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
         private PopulareventItemBinding binding;
+
         public EventViewHolder(@NonNull PopulareventItemBinding itemView) {
             super(itemView.getRoot());
-            this.binding=itemView;
+            this.binding = itemView;
         }
     }
 }

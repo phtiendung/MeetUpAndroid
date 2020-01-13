@@ -18,13 +18,13 @@ public class VenuePopular {
     private String description;
     @SerializedName("schedule_openinghour")
     @Expose
-    private Object scheduleOpeninghour;
+    private String scheduleOpeninghour;
     @SerializedName("schedule_closinghour")
     @Expose
-    private Object scheduleClosinghour;
+    private String scheduleClosinghour;
     @SerializedName("schedule_closed")
     @Expose
-    private Object scheduleClosed;
+    private String scheduleClosed;
 
     public Integer getId() {
         return id;
@@ -58,27 +58,27 @@ public class VenuePopular {
         this.description = description;
     }
 
-    public Object getScheduleOpeninghour() {
+    public String getScheduleOpeninghour() {
         return scheduleOpeninghour;
     }
 
-    public void setScheduleOpeninghour(Object scheduleOpeninghour) {
+    public void setScheduleOpeninghour(String scheduleOpeninghour) {
         this.scheduleOpeninghour = scheduleOpeninghour;
     }
 
-    public Object getScheduleClosinghour() {
+    public String getScheduleClosinghour() {
         return scheduleClosinghour;
     }
 
-    public void setScheduleClosinghour(Object scheduleClosinghour) {
+    public void setScheduleClosinghour(String scheduleClosinghour) {
         this.scheduleClosinghour = scheduleClosinghour;
     }
 
-    public Object getScheduleClosed() {
+    public String getScheduleClosed() {
         return scheduleClosed;
     }
 
-    public void setScheduleClosed(Object scheduleClosed) {
+    public void setScheduleClosed(String scheduleClosed) {
         this.scheduleClosed = scheduleClosed;
     }
 }

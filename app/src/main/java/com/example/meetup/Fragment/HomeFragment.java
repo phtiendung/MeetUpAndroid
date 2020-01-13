@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
                 }
                 else
                 {
-                    PopularFragment popularFragment=new PopularFragment();
+                    PopularEventFragment popularFragment=new PopularEventFragment();
                     loadFragment(popularFragment);
                     Log.e("TAG","B");
                 }
