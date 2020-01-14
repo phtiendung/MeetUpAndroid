@@ -1,78 +1,103 @@
 package com.example.meetup.Model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class EventDetail {
+    @PrimaryKey
+    @ColumnInfo(name="id")
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
     @SerializedName("status")
     @Expose
+    @ColumnInfo(name="status")
     private Integer status;
     @SerializedName("link")
     @Expose
+    @ColumnInfo(name="link")
     private String link;
     @SerializedName("photo")
     @Expose
+    @ColumnInfo(name="photo")
     private String photo;
     @SerializedName("name")
     @Expose
+    @ColumnInfo(name="name")
     private String name;
     @SerializedName("description_raw")
     @Expose
+    @ColumnInfo(name="description_raw")
     private String descriptionRaw;
     @SerializedName("description_html")
     @Expose
+    @ColumnInfo(name="description_html")
     private String descriptionHtml;
     @SerializedName("artist")
     @Expose
-    private Object artist;
+    @ColumnInfo(name="artist")
+    private String artist;
     @SerializedName("schedule_permanent")
     @Expose
-    private Object schedulePermanent;
+    @ColumnInfo(name="schedule_permanent")
+    private String schedulePermanent;
     @SerializedName("schedule_date_warning")
     @Expose
-    private Object scheduleDateWarning;
+    @ColumnInfo(name="schedule_date_warning")
+    private String scheduleDateWarning;
     @SerializedName("schedule_time_alert")
     @Expose
-    private Object scheduleTimeAlert;
+    @ColumnInfo(name="schedule_time_alert")
+    private String scheduleTimeAlert;
     @SerializedName("schedule_start_date")
     @Expose
+    @ColumnInfo(name="schedule_start_date")
     private String scheduleStartDate;
     @SerializedName("schedule_start_time")
     @Expose
+    @ColumnInfo(name="schedule_end_date")
     private String scheduleStartTime;
     @SerializedName("schedule_end_date")
     @Expose
+    @ColumnInfo(name="schedule_end_date")
     private String scheduleEndDate;
     @SerializedName("schedule_end_time")
     @Expose
+    @ColumnInfo(name="schedule_end_time")
     private String scheduleEndTime;
     @SerializedName("schedule_one_day_event")
     @Expose
-    private Object scheduleOneDayEvent;
+    @ColumnInfo(name="schedule_one_day_event")
+    private String scheduleOneDayEvent;
     @SerializedName("schedule_extra")
     @Expose
-    private Object scheduleExtra;
+    @ColumnInfo(name="schedule_extra")
+    private String scheduleExtra;
     @SerializedName("going_count")
     @Expose
+    @ColumnInfo(name="going_count")
     private Integer goingCount;
     @SerializedName("went_count")
     @Expose
+    @ColumnInfo(name="went_count")
     private Integer wentCount;
     @SerializedName("venue")
     @Expose
-    private VenuePopular venue;
+    @ColumnInfo(name="venue")
+    private Venue venue;
     @SerializedName("category")
     @Expose
+    @ColumnInfo(name="category")
     private Category category;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -124,35 +149,35 @@ public class EventDetail {
         this.descriptionHtml = descriptionHtml;
     }
 
-    public Object getArtist() {
+    public String getArtist() {
         return artist;
     }
 
-    public void setArtist(Object artist) {
+    public void setArtist(String artist) {
         this.artist = artist;
     }
 
-    public Object getSchedulePermanent() {
+    public String getSchedulePermanent() {
         return schedulePermanent;
     }
 
-    public void setSchedulePermanent(Object schedulePermanent) {
+    public void setSchedulePermanent(String schedulePermanent) {
         this.schedulePermanent = schedulePermanent;
     }
 
-    public Object getScheduleDateWarning() {
+    public String getScheduleDateWarning() {
         return scheduleDateWarning;
     }
 
-    public void setScheduleDateWarning(Object scheduleDateWarning) {
+    public void setScheduleDateWarning(String scheduleDateWarning) {
         this.scheduleDateWarning = scheduleDateWarning;
     }
 
-    public Object getScheduleTimeAlert() {
+    public String getScheduleTimeAlert() {
         return scheduleTimeAlert;
     }
 
-    public void setScheduleTimeAlert(Object scheduleTimeAlert) {
+    public void setScheduleTimeAlert(String scheduleTimeAlert) {
         this.scheduleTimeAlert = scheduleTimeAlert;
     }
 
@@ -188,19 +213,19 @@ public class EventDetail {
         this.scheduleEndTime = scheduleEndTime;
     }
 
-    public Object getScheduleOneDayEvent() {
+    public String getScheduleOneDayEvent() {
         return scheduleOneDayEvent;
     }
 
-    public void setScheduleOneDayEvent(Object scheduleOneDayEvent) {
+    public void setScheduleOneDayEvent(String scheduleOneDayEvent) {
         this.scheduleOneDayEvent = scheduleOneDayEvent;
     }
 
-    public Object getScheduleExtra() {
+    public String getScheduleExtra() {
         return scheduleExtra;
     }
 
-    public void setScheduleExtra(Object scheduleExtra) {
+    public void setScheduleExtra(String scheduleExtra) {
         this.scheduleExtra = scheduleExtra;
     }
 
@@ -220,11 +245,11 @@ public class EventDetail {
         this.wentCount = wentCount;
     }
 
-    public VenuePopular getVenue() {
+    public Venue getVenue() {
         return venue;
     }
 
-    public void setVenue(VenuePopular venue) {
+    public void setVenue(Venue venue) {
         this.venue = venue;
     }
 

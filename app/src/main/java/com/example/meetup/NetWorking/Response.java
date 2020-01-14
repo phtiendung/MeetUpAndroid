@@ -2,6 +2,7 @@ package com.example.meetup.NetWorking;
 
 import com.example.meetup.Model.Category;
 import com.example.meetup.Model.Event;
+import com.example.meetup.Model.EventDetail;
 import com.example.meetup.Model.News;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,25 +21,22 @@ public class Response {
 
     @SerializedName("categories")
     private List<Category> categories;
-
+    @SerializedName("detail_events")
+    private EventDetail eventDetail;
 
     public List<News> getNews() {
         return news;
     }
-//    public EventDetail getEventDetail() {
-//        return eventDetail;
-//    }
-
     public List<Event> getEvents() {
         return events;
     }
-
     public String getToken() {
         return token;
     }
-
     public List<Category> getCategories() {
         return categories;
     }
-
+    public EventDetail getEventDetail() {
+        return eventDetail;
+    }
 }
