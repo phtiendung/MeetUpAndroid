@@ -24,4 +24,6 @@ public interface API {
     @GET("getDetailEvent")
     Call<ApiResultEventDetail> getDetailEvent(
             @Query("event_id") int id);
+    @GET("listCategories")
+    Call<APIStatus> getCatagory();
 }

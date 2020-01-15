@@ -1,21 +1,30 @@
 package com.example.meetup.Model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity(tableName = "table_category")
 public class Category {
+    @PrimaryKey
+    @ColumnInfo(name = "category_id")
     @SerializedName("id")
     @Expose
     private Integer id;
+    @ColumnInfo(name = "category_name")
     @SerializedName("name")
     @Expose
     private String name;
+    @ColumnInfo(name = "category_slug")
     @SerializedName("slug")
     @Expose
     private String slug;
+    @ColumnInfo(name = "category_parent_id")
     @SerializedName("parent_id")
     @Expose
-    private Object parentId;
+    private String parentId;
 
     public Integer getId() {
         return id;
@@ -41,11 +50,11 @@ public class Category {
         this.slug = slug;
     }
 
-    public Object getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Object parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

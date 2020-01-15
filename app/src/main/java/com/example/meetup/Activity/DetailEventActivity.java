@@ -58,6 +58,7 @@ public class DetailEventActivity extends AppCompatActivity {
                 binding.tvName.setText(detail.getVenue().getName());
                 binding.tvGenre.setText(detail.getCategory().getSlug());
                 binding.tvEventPlace.setText(detail.getVenue().getContactAddress());
+                binding.tvArtist.setText(detail.getVenue().getContactPhone());
                 Glide.with(binding.imvEvent).load(detail.getPhoto()).into(binding.imvEvent);
             }
 
