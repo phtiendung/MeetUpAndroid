@@ -56,7 +56,7 @@ public class NewsFragment extends Fragment implements Callback<APIStatus>, Swipe
                     public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
                         List<News> newsList = response.body().getResponse().getNews();
                         data.addAll(newsList);
-                        newsAdapter.notifyItemRangeInserted(page * 10, 10);
+                        newsAdapter.notifyItemRangeInserted(page*10, 10);
                     }
 
                     @Override

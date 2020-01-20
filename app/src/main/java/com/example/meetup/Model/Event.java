@@ -13,7 +13,7 @@ public class Event {
     @ColumnInfo(name="event_id")
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
     @ColumnInfo(name="event_status")
     @SerializedName("status")
     @Expose
@@ -83,11 +83,11 @@ public class Event {
     @Embedded
     private VenuePopular venue;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

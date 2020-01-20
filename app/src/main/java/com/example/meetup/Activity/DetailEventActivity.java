@@ -50,6 +50,7 @@ public class DetailEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<ApiResultEventDetail> call, Response<ApiResultEventDetail> response) {
+
                 detail=response.body().getResponse().getEventDetail();
                 binding.tvPlace.setText(detail.getVenue().getName());
                 binding.tvEventName.setText(detail.getName());

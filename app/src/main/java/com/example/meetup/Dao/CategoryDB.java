@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.meetup.Model.Category;
 
-@Database(entities = Category.class,version = 1)
+@Database(entities = {Category.class},version = 1)
 public abstract class CategoryDB extends RoomDatabase {
     private static CategoryDB categoryDB;
     public static CategoryDB getInstance(Context context, String databasename)

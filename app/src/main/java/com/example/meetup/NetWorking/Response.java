@@ -21,8 +21,7 @@ public class Response {
 
     @SerializedName("categories")
     private List<Category> categories;
-    @SerializedName("detail_events")
-    private EventDetail eventDetail;
+
 
     public List<News> getNews() {
         return news;
@@ -36,7 +35,5 @@ public class Response {
     public List<Category> getCategories() {
         return categories;
     }
-    public EventDetail getEventDetail() {
-        return eventDetail;
-    }
+
 }

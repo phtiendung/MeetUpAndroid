@@ -1,5 +1,6 @@
 package com.example.meetup.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +13,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.meetup.Activity.EventCategoryActivity;
+import com.example.meetup.Activity.ListEventCategoryActivity;
 import com.example.meetup.Adapter.CategoryAdapter;
 import com.example.meetup.Dao.CategoryDB;
 import com.example.meetup.Model.Category;
 import com.example.meetup.NetWorking.APIClient;
 import com.example.meetup.NetWorking.APIStatus;
+import com.example.meetup.OnClickEventCategory;
+import com.example.meetup.OnItemClickListener;
 import com.example.meetup.R;
 import com.example.meetup.databinding.FragmentBrowserBinding;
 
@@ -27,45 +32,52 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BrowserFragment extends Fragment {
+public class BrowserFragment extends Fragment implements OnClickEventCategory {
     private CategoryAdapter adapter;
-    private List<Category> list=new ArrayList<>();
+    private List<Category> list = new ArrayList<>();
     private FragmentBrowserBinding fragmentBrowserBinding;
-    private String DATABASE_NAME="category_database";
+    private String DATABASE_NAME = "category_database";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentBrowserBinding= DataBindingUtil.inflate(inflater, R.layout.fragment_browser,container,false);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+
+        fragmentBrowserBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         fragmentBrowserBinding.rcvCategory.setLayoutManager(linearLayoutManager);
-        View view=fragmentBrowserBinding.getRoot();
-        adapter=new CategoryAdapter(getContext());
+        View view = fragmentBrowserBinding.getRoot();
+        adapter = new CategoryAdapter(getContext());
         //CategoryDB.getInstance(getContext(),DATABASE_NAME).getCategoryDao().deleteCategorytAll();
         addData();
-        return  view;
+        adapter.setOnItemClickListener(this);
+        return view;
     }
-    private void addData()
-    {
-        if(CategoryDB.getInstance(getContext(),DATABASE_NAME).getCategoryDao().getCategorysAll().isEmpty())
-        {
-            APIClient.getInstance().getCatagory().enqueue(new Callback<APIStatus>() {
+
+    private void addData() {
+        if (CategoryDB.getInstance(getContext(), DATABASE_NAME).getCategoryDao().getCategorysAll().isEmpty()) {
+            APIClient.getInstance().getCategory().enqueue(new Callback<APIStatus>() {
                 @Override
                 public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-                   List<Category> categories=response.body().getResponse().getCategories();
-                   CategoryDB.getInstance(getContext(),DATABASE_NAME).getCategoryDao().insertCategory(categories);
+                    List<Category> categories = response.body().getResponse().getCategories();
+                    CategoryDB.getInstance(getContext(), DATABASE_NAME).getCategoryDao().insertCategory(categories);
                 }
 
                 @Override
                 public void onFailure(Call<APIStatus> call, Throwable t) {
-
                 }
             });
-        }
-        else
-        {
-            list=CategoryDB.getInstance(getContext(),DATABASE_NAME).getCategoryDao().getCategorysAll();
+        } else {
+            list = CategoryDB.getInstance(getContext(), DATABASE_NAME).getCategoryDao().getCategorysAll();
             adapter.setData(list);
             fragmentBrowserBinding.rcvCategory.setAdapter(adapter);
+
         }
+    }
+
+    @Override
+    public void onClickItem(Category category) {
+        Intent intent = new Intent(getActivity(), EventCategoryActivity.class);
+        intent.putExtra("category", category);
+        startActivity(intent);
     }
 }

@@ -4,6 +4,7 @@ package com.example.meetup.NetWorking;
 import com.example.meetup.Model.Event;
 
 import java.util.List;
+
 import retrofit2.Call;
 
 import retrofit2.http.GET;
@@ -16,14 +17,24 @@ public interface API {
             @Query("pageIndex") int pageIndex,
             @Query("pageSize") int pageSize
     );
+
     @GET("listPopularEvents")
     Call<APIStatus> getPopularEvent(
             @Query("pageIndex") int pageIndex,
             @Query("pageSize") int pageSize
     );
+
     @GET("getDetailEvent")
     Call<ApiResultEventDetail> getDetailEvent(
             @Query("event_id") int id);
+
     @GET("listCategories")
-    Call<APIStatus> getCatagory();
+    Call<APIStatus> getCategory();
+
+    @GET("listEventsByCategory")
+    Call<ApiResultInCategory> getEventCategory(
+            @Query("category_id") int categoryId,
+            @Query("pageIndex") int pageIndex,
+            @Query("pageSize") int pageSize
+    );
 }

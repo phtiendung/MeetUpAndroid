@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.meetup.Model.Event;
 
-@Database(entities = Event.class,version = 1)
+@Database(entities = {Event.class},version = 1)
 public abstract class EventDB extends RoomDatabase{
     private static EventDB eventDB;
     public static EventDB getInstance(Context context,String databasename)
