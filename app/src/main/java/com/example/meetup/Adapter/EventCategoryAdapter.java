@@ -21,11 +21,15 @@ import com.example.meetup.databinding.PopulareventItemBinding;
 import java.util.List;
 
 public class EventCategoryAdapter extends RecyclerView.Adapter<EventCategoryAdapter.EventCategoryViewHolder> {
-    List<EventInCateGory> data;
-    LayoutInflater inflater;
-    OnItemClickListener  onItemClickListener;
+    private List<EventInCateGory> data;
+    private LayoutInflater inflater;
+    private OnItemClickListener  onItemClickListener;
     public EventCategoryAdapter(Context context) {
         this.inflater = inflater;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public void setData(List<EventInCateGory> data) {

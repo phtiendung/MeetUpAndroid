@@ -21,6 +21,7 @@ import com.example.meetup.Model.Event;
 import com.example.meetup.Model.EventInCateGory;
 import com.example.meetup.NetWorking.APIClient;
 import com.example.meetup.NetWorking.ApiResultInCategory;
+import com.example.meetup.OnItemClickListener;
 import com.example.meetup.R;
 import com.example.meetup.databinding.ActivityEventCategoryBinding;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventCategoryActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class EventCategoryActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,OnItemClickListener {
     private ActivityEventCategoryBinding binding;
     private List<EventInCateGory> data = new ArrayList<>();
     private EventCategoryAdapter adapter;
@@ -48,6 +49,7 @@ public class EventCategoryActivity extends AppCompatActivity implements SwipeRef
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getApplicationContext());
         binding.rcvCategory.setLayoutManager(linearLayoutManager);
         adapter=new EventCategoryAdapter(getApplicationContext());
+        adapter.setOnItemClickListener(this);
         //EventCategoryDB.getInstance(getApplicationContext(),DATABASE_NAME).getEventCategoryDao().deleteEventAll();
         endlessRecyclerViewScrollListener= new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -119,5 +121,12 @@ public class EventCategoryActivity extends AppCompatActivity implements SwipeRef
                 Toast.makeText(getApplicationContext(), "Kiểm tra lại kết nối mạng", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onItemClickListener(int event_id) {
+        Intent intent=new Intent(EventCategoryActivity.this, DetailEventActivity.class);
+        intent.putExtra("id",event_id);
+        startActivity(intent);
     }
 }

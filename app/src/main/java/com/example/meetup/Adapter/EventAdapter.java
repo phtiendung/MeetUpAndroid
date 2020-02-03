@@ -44,7 +44,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         PopulareventItemBinding itemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.popularevent_item, parent, false);
         return new EventViewHolder(itemBinding);
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
@@ -63,7 +62,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             });
         }
     }
-
     @Override
     public int getItemCount() {
         return data.size();

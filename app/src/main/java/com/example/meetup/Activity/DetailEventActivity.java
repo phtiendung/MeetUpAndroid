@@ -16,9 +16,11 @@ import com.bumptech.glide.Glide;
 import com.example.meetup.Adapter.EventAdapter;
 import com.example.meetup.Model.Event;
 import com.example.meetup.Model.EventDetail;
+import com.example.meetup.NetWorking.API;
 import com.example.meetup.NetWorking.APIClient;
 import com.example.meetup.NetWorking.APIStatus;
 import com.example.meetup.NetWorking.ApiResultEventDetail;
+import com.example.meetup.NetWorking.ApiResultNearlyEvent;
 import com.example.meetup.R;
 import com.example.meetup.databinding.ActivityDetailEventBinding;
 
@@ -61,24 +63,26 @@ public class DetailEventActivity extends AppCompatActivity {
                 binding.tvEventPlace.setText(detail.getVenue().getContactAddress());
                 binding.tvArtist.setText(detail.getVenue().getContactPhone());
                 Glide.with(binding.imvEvent).load(detail.getPhoto()).into(binding.imvEvent);
+                APIClient.getInstance().listNearlyEvents(250,detail.getVenue().getGeoLong(),detail.getVenue().getGeoLat()).enqueue(new Callback<ApiResultNearlyEvent>() {
+                    @Override
+                    public void onResponse(Call<ApiResultNearlyEvent> call, Response<ApiResultNearlyEvent> response) {
+                        if(response.body().getStatus()!=0)
+                        {
+                            eventList=response.body().getResponse().getEvent();
+                             adapter.setData(eventList);
+                             binding.rcvEvent.setAdapter(adapter);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ApiResultNearlyEvent> call, Throwable t) {
+                        Log.e("list",t.getMessage());
+                    }
+                });
             }
 
             @Override
             public void onFailure(Call<ApiResultEventDetail> call, Throwable t) {
                 Toast.makeText(DetailEventActivity.this,"Không có kết nối mạng",Toast.LENGTH_SHORT).show();
-            }
-        });
-        APIClient.getInstance().getPopularEvent(1,10).enqueue(new Callback<APIStatus>() {
-            @Override
-            public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
-                eventList=response.body().getResponse().getEvents();
-                adapter.setData(eventList);
-                binding.rcvEvent.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<APIStatus> call, Throwable t) {
-
             }
         });
     }
