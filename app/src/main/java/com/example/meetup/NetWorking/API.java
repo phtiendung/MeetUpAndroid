@@ -56,4 +56,13 @@ public interface API {
                           @Field("password") String password);
     @POST("resetPassword")
     Call<APIStatus> reset(@Query("email") String email);
+    @POST("doUpdateEvent")
+    Call<APIStatus> doUpdateEvent(@Header("Authorization") String token,
+                                  @Query("status") long status,
+                                  @Query("event_id") long event_id
+    );
+    @GET("listMyEvents")
+    Call<APIStatus> getEventGoingWent(@Header("Authorization") String token,
+                                  @Query("status") long status);
+
 }

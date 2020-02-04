@@ -26,7 +26,7 @@ import retrofit2.Response;
 
 public class SignupFragment extends Fragment {
     FragmentMypageSignupBinding binding;
-    MeFragment meFragment=(MeFragment)getParentFragment();
+    MeFragment meFragment;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class SignupFragment extends Fragment {
         binding.tvAlreadyAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginFragment loginFragment=new LoginFragment();
+                meFragment=(MeFragment)getParentFragment();
                 meFragment.showFragment(meFragment.getLoginFragment());
             }
         });
@@ -52,7 +52,9 @@ public class SignupFragment extends Fragment {
                             public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
                                 if(response.body().getStatus()!=0)
                                 {
-                                    Toast.makeText(getContext(),"Đăng kí thành công",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(),"Đăng kí thành công, hãy đăng nhập lại",Toast.LENGTH_SHORT).show();
+                                    meFragment=(MeFragment)getParentFragment();
+                                    meFragment.showFragment(meFragment.getLoginFragment());
                                 }
                                 else
                                 {

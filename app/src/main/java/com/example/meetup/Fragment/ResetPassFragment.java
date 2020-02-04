@@ -22,6 +22,7 @@ import retrofit2.Response;
 
 public class ResetPassFragment extends Fragment {
     FragmentMypageFogotpasswordBinding binding;
+    MeFragment meFragment;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,6 +48,13 @@ public class ResetPassFragment extends Fragment {
                         Toast.makeText(getContext(),"Lỗi hệ thống ",Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+        binding.imbtBackTologin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                meFragment=(MeFragment)getParentFragment();
+                meFragment.showFragment(meFragment.getLoginFragment());
             }
         });
         return binding.getRoot();
