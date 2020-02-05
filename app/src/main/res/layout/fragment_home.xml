@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             app:tabIndicatorColor="#CCCCCC"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="#FF3333"
+            app:tabSelectedTextColor="#FF0000"
             app:tabTextColor="#0D0D0E" />
 
         <androidx.viewpager.widget.ViewPager

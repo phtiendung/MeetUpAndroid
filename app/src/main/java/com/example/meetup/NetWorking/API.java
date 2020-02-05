@@ -28,8 +28,8 @@ public interface API {
     );
 
     @GET("getDetailEvent")
-    Call<ApiResultEventDetail> getDetailEvent(
-            @Query("event_id") int id);
+    Call<ApiResultEventDetail> getDetailEvent(@Header("Authorization") String token,
+                                              @Query("event_id") int id);
 
     @GET("listCategories")
     Call<APIStatus> getCategory();
@@ -40,29 +40,38 @@ public interface API {
             @Query("pageIndex") int pageIndex,
             @Query("pageSize") int pageSize
     );
+
     @GET("listNearlyEvents")
     Call<ApiResultNearlyEvent> listNearlyEvents(
             //@Header("Authorization") String token,
             @Query("radius") int radius,
             @Query("longitue") String longitue,
             @Query("latitude") String latitude);
+
     @POST("register")
     Call<APIStatus> register(@Query("name") String name,
                              @Query("email") String email,
                              @Query("password") String password);
+
     @POST("login")
     @FormUrlEncoded
     Call<APIStatus> login(@Field("email") String email,
                           @Field("password") String password);
+
     @POST("resetPassword")
     Call<APIStatus> reset(@Query("email") String email);
+
     @POST("doUpdateEvent")
     Call<APIStatus> doUpdateEvent(@Header("Authorization") String token,
                                   @Query("status") long status,
                                   @Query("event_id") long event_id
     );
+
     @GET("listMyEvents")
     Call<APIStatus> getEventGoingWent(@Header("Authorization") String token,
-                                  @Query("status") long status);
+                                      @Query("status") long status);
 
+    @POST("doFollowVenue")
+    Call<APIStatus> doFolow(@Header("Authorization") String token,
+                            @Query("venue_id") long id);
 }

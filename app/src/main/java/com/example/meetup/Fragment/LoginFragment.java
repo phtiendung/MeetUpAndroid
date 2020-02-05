@@ -35,7 +35,6 @@ public class LoginFragment extends Fragment {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                meFragment=(MeFragment)getParentFragment();
                 APIClient.getInstance().login(binding.edtEmail.getText().toString(),binding.edtPassword.getText().toString()).enqueue(new Callback<APIStatus>() {
                     @Override
                     public void onResponse(Call<APIStatus> call, Response<APIStatus> response) {
