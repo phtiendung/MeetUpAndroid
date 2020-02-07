@@ -26,15 +26,12 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
-import com.example.meetup.Activity.DetailEventActivity;
 import com.example.meetup.Adapter.NearlyEventAdapter;
-import com.example.meetup.EndlessRecyclerViewScrollListener;
 import com.example.meetup.Model.Event;
 import com.example.meetup.Model.EventDetail;
 import com.example.meetup.NetWorking.APIClient;
 import com.example.meetup.NetWorking.ApiResultEventDetail;
 import com.example.meetup.NetWorking.ApiResultNearlyEvent;
-import com.example.meetup.OnEventClickListener;
 import com.example.meetup.R;
 import com.example.meetup.Service.MyShared;
 import com.example.meetup.databinding.FragmentNearBinding;
@@ -42,15 +39,12 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -77,6 +71,7 @@ public class NearFragment extends Fragment {
     private final String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private List<EventDetail> detailList;
     private SnapHelper snapHelper;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
@@ -85,7 +80,7 @@ public class NearFragment extends Fragment {
         context = container.getContext();
         myShared = new MyShared(getContext());
         TOKEN_GET = myShared.get(TOKEN);
-        snapHelper=new PagerSnapHelper();
+        snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(fragmentNearBinding.rcvNearevent);
         adapter = new NearlyEventAdapter(getContext());
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
@@ -100,8 +95,11 @@ public class NearFragment extends Fragment {
         fragmentNearBinding.rcvNearevent.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                int position=getCurrentItem();
+                int position = getCurrentItem();
+                EventDetail detail = detailList.get(position);
+                moveCamera(detail);
             }
+
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -119,6 +117,7 @@ public class NearFragment extends Fragment {
                     mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
                     mapFragment.getMapAsync(googleMap -> {
                         mMap = googleMap;
+                        mMap.setOnMarkerClickListener(listener);
                         Lat = mLocation.getLatitude();
                         Long = mLocation.getLongitude();
                         String la = String.valueOf(Lat);
@@ -175,6 +174,7 @@ public class NearFragment extends Fragment {
         }
         return true;
     }
+
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth()
@@ -185,16 +185,17 @@ public class NearFragment extends Fragment {
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
     private void addMarker(List<Event> events) {
-        detailList=new ArrayList<>();
+        detailList = new ArrayList<>();
         BitmapDescriptor icon = bitmapDescriptorFromVector(context, R.drawable.ic_location_on_black_24dp);
         for (Event i : events) {
             APIClient.getInstance().getDetailEvent(TOKEN_GET, i.getId()).enqueue(new Callback<ApiResultEventDetail>() {
                 @Override
                 public void onResponse(Call<ApiResultEventDetail> call, Response<ApiResultEventDetail> response) {
-                    EventDetail detail=response.body().getResponse().getEventDetail();
+                    EventDetail detail = response.body().getResponse().getEventDetail();
                     LatLng lng = new LatLng(Double.valueOf(detail.getVenue().getGeoLat()), Double.valueOf(detail.getVenue().getGeoLong()));
-                    MarkerOptions markerOptions = new MarkerOptions().position(lng).title(detail.getName());
+                    MarkerOptions markerOptions = new MarkerOptions().position(lng).title(detail.getName()).snippet("Khoảng cách đến bạn: "+convertDistanceToString(dinstance(lng.latitude,lng.longitude)[0]));
                     mMap.addMarker(markerOptions).setIcon(icon);
                     detailList.add(detail);
                 }
@@ -206,9 +207,42 @@ public class NearFragment extends Fragment {
             });
         }
     }
-    private int getCurrentItem(){
-        return ((LinearLayoutManager)fragmentNearBinding.rcvNearevent.getLayoutManager())
+
+    private int getCurrentItem() {
+        return ((LinearLayoutManager) fragmentNearBinding.rcvNearevent.getLayoutManager())
                 .findFirstVisibleItemPosition();
     }
 
+    private void moveCamera(EventDetail eventDetail) {
+        LatLng lng = new LatLng(Double.valueOf(eventDetail.getVenue().getGeoLat()), Double.valueOf(eventDetail.getVenue().getGeoLong()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lng, 15));
+    }
+
+    GoogleMap.OnMarkerClickListener listener = marker -> {
+        moveToItem(marker);
+        Log.e("distance",marker.getSnippet());
+        return false;
+    };
+
+    private void moveToItem(Marker marker) {
+        for (int i = 0; i < detailList.size(); i++) {
+            if (marker.getTitle().equals(detailList.get(i).getName())) {
+                fragmentNearBinding.rcvNearevent.scrollToPosition(i);
+            }
+        }
+
+    }
+
+    private float[] dinstance(double lat, double log) {
+        float[] results = new float[1];
+        Location.distanceBetween(mLocation.getLatitude(),mLocation.getLongitude(), lat, log,results);
+        return results;
+    }
+    private String convertDistanceToString(float distance) {
+        if (distance < 1000) {
+            return (int) distance + " m";
+        } else {
+            return (Math.round(distance * 10) / 10) / 1000 + " Km";
+        }
+    }
 }
